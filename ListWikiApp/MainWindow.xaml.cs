@@ -250,31 +250,135 @@ namespace ListWikiApp
         #region Search
         private void ButtonSearch_Click(object sender, RoutedEventArgs e)
         {
+            // TextBoxInput is not empty
+            if (!string.IsNullOrWhiteSpace(TextBoxInput.Text))
+            {
+                // sorts Wiki to ensure BinarySearch is functional
+                Wiki.Sort();
 
+                // create new Information object, call SetName with TextBoxInput.Text
+                Information findInfo = new Information();
+                findInfo.SetName(TextBoxInput.Text);
+
+                // returns index of TextBoxInput in Wiki
+                int index = Wiki.BinarySearch(findInfo);
+
+                if (index >= 0) // found
+                {
+                    StatusBarInfo.Text = TextBoxInput.Text + " found.";
+                    ListViewOutput.SelectedIndex = index;
+                    ClearFocus();
+                }
+                else // not found
+                {
+                    StatusBarInfo.Text = TextBoxInput.Text + " not found.";
+                    ListViewOutput.SelectedIndex = -1;
+                    ClearFocus();
+                }
+            }
+            else // TextBoxInput is empty
+            {
+                StatusBarInfo.Text = "Please enter a word to search.";
+                ClearFocus();
+            }
         }
         #endregion
 
         #region Open
         private void ButtonOpen_Click(object sender, RoutedEventArgs e)
         {
+            // displays prompt to open a data file
+            OpenFileDialog ofd = new OpenFileDialog { Filter = "data files (*.dat)|*.dat" };
 
+            // if ok
+            if (ofd.ShowDialog() == true)
+            {
+                // calls OpenFile with selected file
+                OpenFile(ofd.FileName);
+
+                DisplayList();
+            }
+            else
+            { // if cancel or exit
+                return;
+            }
         }
 
         private void OpenFile(string file)
         {
+            try
+            {
+                // clears all elements in Wiki
+                Wiki.Clear();
 
+                // reads file
+                using (BinaryReader br = new BinaryReader(new FileStream(file, FileMode.Open)))
+                {
+                    // while position does not equal length of BaseStream
+                    while (br.BaseStream.Position != br.BaseStream.Length)
+                    {
+                        // create new Information object, call setters and add object to Wiki
+                        Information addInfo = new Information();
+                        addInfo.SetName(br.ReadString());
+                        addInfo.SetCategory(br.ReadString());
+                        addInfo.SetStructure(br.ReadString());
+                        addInfo.SetDefinition(br.ReadString());
+                        Wiki.Add(addInfo);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Exception thrown: " + ex, "Critical Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
         #endregion
 
         #region Save
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
+            // displays prompt to save Wiki to a data file
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                DefaultExt = "dat",
+                Filter = "data files (*.dat)|*.dat"
+            };
 
+            // if ok
+            if (sfd.ShowDialog() == true)
+            {
+                DisplayList();
+
+                // calls SaveFile with selected file
+                SaveFile(sfd.FileName);
+            }
+            else
+            { // if cancel or exit
+                return;
+            }
         }
 
         private void SaveFile(string file)
         {
-
+            try
+            {
+                // creates file
+                using (BinaryWriter bw = new BinaryWriter(new FileStream(file, FileMode.Create)))
+                {
+                    // adds all item elements into a data file
+                    foreach (var info in Wiki)
+                    {
+                        bw.Write(info.GetName());
+                        bw.Write(info.GetCategory());
+                        bw.Write(info.GetStructure());
+                        bw.Write(info.GetDefinition());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Exception thrown: " + ex, "Critical Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
         #endregion
 
@@ -287,7 +391,11 @@ namespace ListWikiApp
         #endregion
 
         #region Closing
-
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // output in ListWikiApp\bin\Debug\net7.0-windows
+            SaveFile("autosave.dat");
+        }
         #endregion
     }
 }
