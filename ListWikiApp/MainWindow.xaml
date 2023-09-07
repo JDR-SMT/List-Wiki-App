@@ -5,8 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ListWikiApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Loaded="Window_Loaded"
+        Closing="Window_Closing"
+        Title="MainWindow" Height="391" Width="537">
     <Grid>
-
+        <ListView x:Name="ListViewOutput" Margin="282,40,10,35" SelectionChanged="ListViewOutput_SelectionChanged">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding ColumnName}" Width="140"/>
+                    <GridViewColumn Header="Category" DisplayMemberBinding="{Binding ColumnCategory}" Width="80"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button x:Name="ButtonAdd" Content="Add" Margin="212,40,0,0" Width="56" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Click="ButtonAdd_Click"/>
+        <Button x:Name="ButtonEdit" Content="Edit" Margin="212,70,0,0" Width="56" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Click="ButtonEdit_Click"/>
+        <Button x:Name="ButtonApply" Content="✓" Margin="212,70,0,0" Width="26" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden" Click="ButtonApply_Click"/>
+        <Button x:Name="ButtonCancel" Content="✗" Margin="242,70,0,0" Width="26" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden" Click="ButtonCancel_Click"/>
+        <Button x:Name="ButtonDelete" Content="Delete" Margin="212,100,0,0" Width="56" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Click="ButtonDelete_Click"/>
+        <Button x:Name="ButtonSave" Content="Save" Margin="70,10,0,0" Width="55" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Click="ButtonSave_Click"/>
+        <Button x:Name="ButtonOpen" Content="Open" Margin="10,10,0,0" Width="55" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Click="ButtonOpen_Click"/>
+        <Button x:Name="ButtonSearch" Content="Search" Margin="0,10,10,0" HorizontalAlignment="Right" Width="55" Height="20" VerticalAlignment="Top" Click="ButtonSearch_Click"/>
+        <TextBox x:Name="TextBoxInput" Margin="282,11,70,0" TextWrapping="Wrap" Height="18" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoxName" Margin="10,54,0,0" TextWrapping="Wrap" HorizontalAlignment="Left" Width="130" Height="18" VerticalAlignment="Top" MouseDoubleClick="TextBoxName_MouseDoubleClick"/>
+        <ComboBox x:Name="ComboBoxCategory" Margin="10,94,0,0" HorizontalAlignment="Left" Width="130" Height="20" VerticalAlignment="Top"/>
+        <GroupBox x:Name="GroupBoxStructure" Margin="10,138,0,0" Width="130" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top">
+            <StackPanel Height="33">
+                <RadioButton x:Name="RadioButtonLinear" Content="Linear" d:LayoutOverrides="Width, Height" Margin="0,4,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <RadioButton x:Name="RadioButtonNonLinear" Content="Non-Linear" d:LayoutOverrides="Width, Height" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            </StackPanel>
+        </GroupBox>
+        <TextBox x:Name="TextBoxDefinition" Margin="10,204,0,35" TextWrapping="Wrap" HorizontalAlignment="Left" Width="259"/>
+        <Label x:Name="LabelName" Content="Name" Margin="10,40,0,0" Padding="0,0,0,0" FontSize="10" HorizontalAlignment="Left" Width="50" Height="14" VerticalAlignment="Top"/>
+        <Label x:Name="LabelCategory" Content="Category" Margin="10,80,0,0" Padding="0,0,0,0" FontSize="10" Height="14" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50"/>
+        <Label x:Name="LabelStructure" Content="Structure" Margin="10,124,0,0" Padding="0,0,0,0" FontSize="10" HorizontalAlignment="Left" Width="50" Height="14" VerticalAlignment="Top"/>
+        <Label x:Name="LabelDefinition" Content="Definition" Margin="12,190,0,0" Padding="0,0,0,0" FontSize="10" HorizontalAlignment="Left" Width="50" Height="14" VerticalAlignment="Top"/>
+        <StatusBar Height="25" VerticalAlignment="Bottom">
+            <TextBox x:Name="StatusBarInfo" TextWrapping="Wrap" Width="499" FontSize="10" VerticalAlignment="Center" AllowDrop="False" Height="18" Margin="7,0,0,0" HorizontalAlignment="Left" Background="#FFF1EDED" BorderBrush="#FFF1EDED"/>
+        </StatusBar>
     </Grid>
 </Window>
