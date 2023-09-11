@@ -114,7 +114,7 @@ namespace ListWikiApp
         #region Add
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
-            // if Name, Category, Structure and Definition is not empty
+            // if Name, Category, Structure and Definition is not empty and ValidName is true
             if (!string.IsNullOrWhiteSpace(TextBoxName.Text) && ValidName(TextBoxName.Text)
                 && ComboBoxCategory.SelectedIndex > -1
                 && (RadioButtonLinear.IsChecked == true || RadioButtonNonLinear.IsChecked == true)
@@ -141,7 +141,7 @@ namespace ListWikiApp
             }
         }
 
-        // checks if name already exists in Wiki
+        // checks if name already exists in Wiki, or contains a number or special character
         private bool ValidName(string input)
         {
             if (Wiki.Exists(duplicate => duplicate.GetName().Equals(input)))
