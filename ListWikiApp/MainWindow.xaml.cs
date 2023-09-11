@@ -63,7 +63,7 @@ namespace ListWikiApp
                 ComboBoxCategory.Text = Wiki[ListViewOutput.SelectedIndex].GetCategory();
                 SetStructureRadioButton(ListViewOutput.SelectedIndex);
                 TextBoxDefinition.Text = Wiki[ListViewOutput.SelectedIndex].GetDefinition();
-            } 
+            }
             catch (ArgumentOutOfRangeException) // when an item is edited or deleted
             {
                 ClearAll();
@@ -116,7 +116,7 @@ namespace ListWikiApp
         {
             // if Name, Category, Structure and Definition is not empty
             if (!string.IsNullOrWhiteSpace(TextBoxName.Text) && ValidName(TextBoxName.Text)
-                && ComboBoxCategory.SelectedIndex > -1 
+                && ComboBoxCategory.SelectedIndex > -1
                 && (RadioButtonLinear.IsChecked == true || RadioButtonNonLinear.IsChecked == true)
                 && !string.IsNullOrWhiteSpace(TextBoxDefinition.Text))
             {
@@ -130,7 +130,7 @@ namespace ListWikiApp
 
                 ClearAll();
                 DisplayList();
-            } 
+            }
             else if (!ValidName(TextBoxName.Text)) // invalid name
             {
                 StatusBarInfo.Text = "Name may already exist, or contain numbers or special characters.";
@@ -144,7 +144,7 @@ namespace ListWikiApp
         // checks if name already exists in Wiki
         private bool ValidName(string input)
         {
-            if (Wiki.Exists(duplicate => duplicate.Equals(input))) 
+            if (Wiki.Exists(duplicate => duplicate.GetName().Equals(input)))
             {
                 return false;
             }
@@ -152,7 +152,7 @@ namespace ListWikiApp
             {
                 return false;
             }
-            else if (input.Any(ch => ! char.IsLetter(ch)))
+            else if (input.Any(ch => !char.IsLetter(ch) && !char.IsWhiteSpace(ch)))
             {
                 return false;
             }
