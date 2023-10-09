@@ -176,15 +176,26 @@ namespace ListWikiApp
         {
             try
             {
-                Wiki[ListViewOutput.SelectedIndex].SetName(TextBoxName.Text);
-                Wiki[ListViewOutput.SelectedIndex].SetCategory(ComboBoxCategory.Text);
-                Wiki[ListViewOutput.SelectedIndex].SetStructure(GetStructureRadioButton());
-                Wiki[ListViewOutput.SelectedIndex].SetDefinition(TextBoxDefinition.Text);
+                // if Name, Category, Structure and Definition is not empty
+                if (!string.IsNullOrWhiteSpace(TextBoxName.Text)
+                    && ComboBoxCategory.SelectedIndex > -1
+                    && (RadioButtonLinear.IsChecked == true || RadioButtonNonLinear.IsChecked == true)
+                    && !string.IsNullOrWhiteSpace(TextBoxDefinition.Text))
+                {
+                    Wiki[ListViewOutput.SelectedIndex].SetName(TextBoxName.Text);
+                    Wiki[ListViewOutput.SelectedIndex].SetCategory(ComboBoxCategory.Text);
+                    Wiki[ListViewOutput.SelectedIndex].SetStructure(GetStructureRadioButton());
+                    Wiki[ListViewOutput.SelectedIndex].SetDefinition(TextBoxDefinition.Text);
 
-                ClearAll();
-                ClearFocus();
-                DisplayList();
-                ButtonVisibility(true, false, true); // hide ButtonApply and ButtonCancel
+                    ClearAll();
+                    ClearFocus();
+                    DisplayList();
+                    ButtonVisibility(true, false, true); // hide ButtonApply and ButtonCancel
+                }
+                else // if any input is empty
+                {
+                    StatusBarInfo.Text = "Please complete all fields.";
+                }
             }
             catch (ArgumentOutOfRangeException) // when no item is selected
             {
@@ -401,15 +412,15 @@ namespace ListWikiApp
         #region Loaded
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            // found in ListWikiApp\bin\Debug\net7.0-windows
-            ComboBoxCategory.ItemsSource = File.ReadAllLines("PopulateComboBoxCategory.txt");
+            // found in ListWikiApp\bin\Debug\net6.0-windows
+            ComboBoxCategory.ItemsSource = File.ReadAllLines("ComboBoxCategoryItems.txt");
         }
         #endregion
 
         #region Closing
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // output in ListWikiApp\bin\Debug\net7.0-windows
+            // output in ListWikiApp\bin\Debug\net6.0-windows
             SaveFile("autosave.dat");
         }
         #endregion
